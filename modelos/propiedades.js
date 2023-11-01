@@ -11,8 +11,7 @@ export async function obtenerPropiedades() {
   if(res.status !== 200) {
     throw Error('Los datos no existen');
   }
-  return datos;
-}
+  return datos;}
 
 /**
  * Inserta los datos en la base de datos
