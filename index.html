@@ -39,7 +39,8 @@
                                             <div class="col-md-6">
                                                 <!-- Campos del formulario -->
                                                 <div class="mb-3">
-                                                    <label for="apellidoYNombre" class="form-label">Apellido y nombre</label>
+                                                    <label for="apellidoYNombre" class="form-label">Apellido y
+                                                        nombre</label>
                                                     <input type="text" class="form-control" id="apellidoYNombre"
                                                         placeholder="Ingrese su nombre completo">
                                                 </div>
@@ -116,8 +117,8 @@
                                                 <div class="mb-3">
                                                     <label for="confirmarPassword" class="form-label">Confirmar
                                                         contraseña</label>
-                                                    <input type="password" class="form-control"
-                                                        id="confirmarPassword" placeholder="Confirme su contraña">
+                                                    <input type="password" class="form-control" id="confirmarPassword"
+                                                        placeholder="Confirme su contraña">
                                                 </div>
                                             </div>
 
@@ -172,11 +173,14 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-    <!-- Button trigger modal -->
+    <div id="alerta"></div>
+    <section class="container">
+        <!-- Button trigger modal -->
 
-    <button type="button" class="btn btn-primary" id="btnNuevo">
-        Nueva Propiedad
-    </button>
+        <button type="button" class="btn btn-primary my-3  " id="btnNuevo">
+            Nueva Propiedad
+        </button>
+    </section>
 
 
     <div class="container text-center py-3">
@@ -241,8 +245,9 @@
                                             <select name="operacion" id="operacion" class="form-control"
                                                 placeholder="operacion">
                                                 <option value="compra">Compra</option>
-                                                <option value="venta">Venta</option></select>
-                                                 <option value="alquiler">Alquiler</option></select>
+                                                <option value="venta">Venta</option>
+                                            </select>
+                                            <option value="alquiler">Alquiler</option></select>
                                             <label for="operacion">Operacion</label>
                                         </div>
                                         <div class="input-group mb-3">
@@ -269,7 +274,7 @@
                                             <label for="direccion">Direccion</label>
                                         </div>
                                         <div class="form-floating">
-                                            <textarea  name="descripcion" id="descripcion" class="form-control"
+                                            <textarea name="descripcion" id="descripcion" class="form-control"
                                                 placeholder="descripcion"></textarea>
                                             <label for="descripcion">Descripcion</label>
                                         </div>

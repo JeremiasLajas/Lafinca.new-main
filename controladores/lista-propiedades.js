@@ -1,6 +1,9 @@
-import { insertarPropiedades, obtenerPropiedades } from "../modelos/propiedades";
+import { insertarPropiedades, obtenerPropiedades, actualizarPropiedades } from "../modelos/propiedades";
 const btnNuevo = document.querySelector('#btnNuevo');
 const formularioModal = new bootstrap.Modal(document.getElementById('formularioModal'));
+const formulario = document.querySelector('#formulario');
+// Alerta
+const alerta = document.querySelector('#alerta');
 
 // Inputs
 const inputCodigo = document.querySelector("#codigo");
@@ -20,78 +23,86 @@ const frmImagen = document.querySelector("#frmimagen");
 // Variables
 let opcion = '';
 let id;
+let codigo;
 let mensajeAlerta;
 
 // Evento que sucede cuando todo el contenido del DOM es leído
 document.addEventListener('DOMContentLoaded', () => {
-    mostrarPropiedades();
+  mostrarPropiedades();
 });
 
 /**
  * Ejecuta el evento click del Botón Nuevo
  */
 btnNuevo.addEventListener('click', () => {
-    // Limpiamos los inputs
-    inputCodigo.value = null;
-    inputTitulo.value = null;
-    inputPropietario.value = null;
-    inputPrecio.value = null;
-    inputOperacion.value = null;
-    inputMt2.value = null;
-    inputAmbientes.value = null;
-    inputDireccion.value = null;
-    inputDescripcion.value = null;
-    inputImagen.value = null;
-    frmImagen.src = './imagen/imagenNodisponible.png';
+  // Limpiamos los inputs
+  inputCodigo.value = null;
+  inputTitulo.value = null;
+  inputPropietario.value = null;
+  inputPrecio.value = null;
+  inputOperacion.value = null;
+  inputMt2.value = null;
+  inputAmbientes.value = null;
+  inputDireccion.value = null;
+  inputDescripcion.value = null;
+  inputImagen.value = null;
+  frmImagen.src = './imagen/imagenNodisponible.png';
   
-    // Mostramos el formulario
-    formularioModal.show();
-  
-    opcion = 'insertar';
-  });
+
+  // Mostramos el formulario
+  formularioModal.show();
+
+  opcion = 'insertar';
+});
 
 
 async function mostrarPropiedades() {
-    const propiedades = await obtenerPropiedades();
+  const propiedades = await obtenerPropiedades();
 
-    const listado = document.getElementById('listado');
-    listado.innerHTML = '';
-    for (let propiedad of propiedades) {
-        console.log(propiedad);
-        listado.innerHTML += `
+  const listado = document.getElementById('listado');
+  listado.innerHTML = '';
+  for (let propiedad of propiedades) {
+    console.log(propiedad);
+    listado.innerHTML += `
     <div class="col  py-3">
       <div class="card" style="width: 18rem;">
           <img src="imagen/${propiedad.imagen}" class="card-img-top" alt="${propiedad.titulo}">
           <div class="card-body">
-              <h5 class="card-title">${propiedad.titulo} - ${propiedad.operacion} </h5>
-              <p class="card-text">${propiedad.descripcion} M2: ${propiedad.mt2} Ambientes: ${propiedad.ambientes} Direccion: ${propiedad.direccion}</p>
-              <p class="card-text">Propietario: ${propiedad.propietarios}</p>
-              <p class="card-text">Precio: U$D ${propiedad.precio}</p>
-              <a href="#" class="btn btn-primary">Consultar</a>
+              <h5 class="card-title"><span name="spantitulo">${propiedad.titulo}</span> - <span name="spanoperacion">${propiedad.operacion} </span></h5>
+              <p class="card-text"><span name="spandescripcion">${propiedad.descripcion}</span> <span name="spanmt2"> M2: ${propiedad.mt2} <span name="spanambientes"> Ambientes: ${propiedad.ambientes} <span name="spandireccion"> Direccion: ${propiedad.direccion}</p>
+              <p class="card-text"> <span name="spanpropietario"> ${propiedad.propietario}</span></p>
+              <p class="card-text"><span name="spanprecio">Precio: U$D ${propiedad.precio}</span></p>
+            <div class="card-footer d-flex justify-content-center">
+              <a class="btnEditar btn btn-primary">Editar</a>
+              <a class="btnBorrar btn btn-danger">Borrar</a>
+              <input type="hidden" class="idPropiedad" value="${propiedad.id}">
+              
+              <input type="hidden" class="imagenPropiedad" value="${propiedad.imagen ?? 'imagenNodisponible.jpg'}">
+            </div>
           </div>
       </div>
     </div>
       `
-    }
+  }
 }
 
 /**
  * Ejecuta el evento submit del formulario
  */
-formulario.addEventListener('submit', function(e) {
+formulario.addEventListener('submit', function (e) {
   e.preventDefault();     // Prevenimos la acción por defecto
   const datos = new FormData(formulario); // Guardamos los datos del formulario
 
-  switch(opcion) {
-      case 'insertar':
-        mensajeAlerta = `Datos guardados`;
-        insertarPropiedades(datos);                        
-        break;
+  switch (opcion) {
+    case 'insertar':
+      mensajeAlerta = `Datos guardados`;
+      insertarPropiedades(datos);
+      break;
 
-      case 'actualizar':
-        mensajeAlerta = `Datos actualizados`;
-        actualizarPropiedades(datos, id);                        
-        break;
+    case 'actualizar':
+      mensajeAlerta = `Datos actualizados`;
+      actualizarPropiedades(datos, id);
+      break;
   }
   insertarAlerta(mensajeAlerta, 'success');
   mostrarPropiedades();
@@ -122,7 +133,7 @@ const insertarAlerta = (mensaje, tipo) => {
  */
 const on = (elemento, evento, selector, manejador) => {
   elemento.addEventListener(evento, e => { // Agregamos el método para escuchar el evento
-    if(e.target.closest(selector)) { // Si el objetivo del manejador es el selector
+    if (e.target.closest(selector)) { // Si el objetivo del manejador es el selector
       manejador(e); // Ejecutamos el método del manejador
     }
   })
@@ -134,20 +145,29 @@ const on = (elemento, evento, selector, manejador) => {
 on(document, 'click', '.btnEditar', e => {
   const cardFooter = e.target.parentNode; // Guardamos el elemento padre del botón
 
-  // Guardamos los valores del card del artículo
-  id = cardFooter.querySelector('.idArticulo').value;
-  const codigo = cardFooter.parentNode.querySelector('span[name=spancodigo]').innerHTML;
-  const nombre = cardFooter.parentNode.querySelector('span[name=spannombre]').innerHTML;
-  const descripcion = cardFooter.parentNode.querySelector('.card-text').innerHTML;
+  // Guardamos los valores del card de la propiedad
+  id = cardFooter.querySelector('.idPropiedad').value;
+  const titulo = cardFooter.parentNode.querySelector('span[name=spantitulo]').innerHTML;
+  const propietario = cardFooter.parentNode.querySelector('span[name=spanpropietario]').innerHTML;
+  const operacion = cardFooter.parentNode.querySelector('span[name=spanoperacion]').innerHTML;
   const precio = cardFooter.parentNode.querySelector('span[name=spanprecio]').innerHTML;
-  const imagen = cardFooter.querySelector('.imagenArticulo').value;
+  const mt2 = cardFooter.parentNode.querySelector('span[name=spanmt2]').innerHTML;
+  const ambientes = cardFooter.parentNode.querySelector('span[name=spanambientes]').innerHTML;
+  const direccion = cardFooter.parentNode.querySelector('span[name=spandireccion]').innerHTML;
+  const descripcion = cardFooter.parentNode.querySelector('span[name=spandescripcion]').innerHTML;
+  const imagen = cardFooter.querySelector('.imagenPropiedad').value;
 
   // Asignamos los valores a los input del formulario
-  inputCodigo.value = codigo;
-  inputNombre.value = nombre;
-  inputDescripcion.value = descripcion;
+  inputTitulo.value = titulo;
+  inputPropietario.value = propietario;
+  inputOperacion.value = operacion;
   inputPrecio.value = precio;
-  frmImagen.src = `imagenes/productos/${imagen}`;
+  inputMt2.value = mt2;
+  inputAmbientes.value = ambientes;
+  inputDireccion.value = direccion;
+  inputDescripcion.value = descripcion;
+  
+  frmImagen.src = `./imagen/${imagen}`;
 
   // Mostramos el formulario
   formularioModal.show();
@@ -162,12 +182,12 @@ on(document, 'click', '.btnEditar', e => {
  */
 on(document, 'click', '.btnBorrar', e => {
   const cardFooter = e.target.parentNode; // Guardamos el elemento padre del botón
-  id = cardFooter.querySelector('.idArticulo').value; // Obtenemos el id del artículo
-  const nombre = cardFooter.parentNode.querySelector('span[name=spannombre]').innerHTML; // Obtenemos el nombre del artículo
-  let aceptar = confirm(`¿Realmente desea eliminar a ${nombre}`); // Pedimos confirmación para eliminar
+  id = cardFooter.querySelector('.idPropiedad').value; // Obtenemos el id de la propiedad
+  const titulo = cardFooter.parentNode.querySelector('span[name=spantitulo]').innerHTML; // Obtenemos el nombre del artículo
+  let aceptar = confirm(`¿Realmente desea eliminar a ${titulo}`); // Pedimos confirmación para eliminar
   if (aceptar) {
-      eliminarArticulos(id);
-      insertarAlerta(`${nombre}  borrado`, 'danger');
-      mostrarArticulos();
+    eliminarPropiedades(id);
+    insertarAlerta(`${titulo}  borrado`, 'danger');
+    mostrarPropiedades();
   }
 });

@@ -51,7 +51,7 @@ export const actualizarPropiedades
 * Elimina los datos en la base de datos
 * @param id el id del artículo a eliminar
 */
-export const eliminarArticulos = (id) => {
+export const eliminarPropiedades = (id) => {
   fetch(`${url}&accion=eliminar&id=${id}`, {}) // Ejecutamos el método eliminar de la API
           .then(res => res.json())
           .then(data => {
