@@ -1,3 +1,4 @@
+
 import { insertarPropiedades, obtenerPropiedades, actualizarPropiedades } from "../modelos/propiedades";
 const btnNuevo = document.querySelector('#btnNuevo');
 const formularioModal = new bootstrap.Modal(document.getElementById('formularioModal'));
@@ -184,7 +185,7 @@ on(document, 'click', '.btnBorrar', e => {
   const cardFooter = e.target.parentNode; // Guardamos el elemento padre del botón
   id = cardFooter.querySelector('.idPropiedad').value; // Obtenemos el id de la propiedad
   const titulo = cardFooter.parentNode.querySelector('span[name=spantitulo]').innerHTML; // Obtenemos el nombre del artículo
-  let aceptar = confirm(`¿Realmente desea eliminar a ${titulo}`); // Pedimos confirmación para eliminar
+  let aceptar = confirm(`¿Realmente desea eliminar a ${titulo}?`); // Pedimos confirmación para eliminar
   if (aceptar) {
     eliminarPropiedades(id);
     insertarAlerta(`${titulo}  borrado`, 'danger');

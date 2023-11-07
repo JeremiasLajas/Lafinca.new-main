@@ -1,3 +1,4 @@
+
 // URL para acceder a la API
 const url = './api/datos.php?tabla=propiedades';
 
