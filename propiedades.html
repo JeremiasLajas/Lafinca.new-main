@@ -19,18 +19,43 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 
-                <a href="registrarse.html"> <button type="button" class="btn btn-outline-success"
-                        style="margin-left: 1rem;">Registrarse</button> </a>
+                <a href="registrarse.html" type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                    data-bs-target="#registroModal" style="margin-left: 1rem;">Registrarse</a>
 
                 <a href="propiedades.html">
                     <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
                         data-bs-target="#registroModal" style="margin-left: 1rem;">Propiedades</button></a>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div id="nav-login">
+                        <div id="div-login">
+                            <form class="d-flex" id="form-login">
+                                <input class="form-control me-2" id="usuario" name="usuario" type="text"
+                                    placeholder="Usuario" aria-label="Usuario" />
+                                <input class="form-control me-2" id="password" name="password" type="password"
+                                    placeholder="Contraseña" aria-label="Contraseña" />
+                                <button class="btn btn-outline-success" type="submit">Login</button>
+                            </form>
+                        </div>
+                        <div id="div-logout" style="display: none;">
+                            <span id="texto-logueado" class="text-white"></span>
+                            <button id="btn-logout" class="btn btn-outline-primary">
+                                Cerrar Sesión
+                            </button>
+                        </div>
+                    </div>
 
 
 
 
 
+                </div>
             </div>
+
+
+
+
+
+        </div>
         </div>
         </div>
     </nav>
@@ -92,8 +117,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Modales -->
 
 
     <!-- Modal Propiedad-->

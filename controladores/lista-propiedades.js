@@ -1,5 +1,5 @@
 
-import { insertarPropiedades, obtenerPropiedades, actualizarPropiedades } from "../modelos/propiedades";
+import { insertarPropiedades, obtenerPropiedades, actualizarPropiedades, eliminarPropiedades } from "../modelos/propiedades";
 const btnNuevo = document.querySelector('#btnNuevo');
 const formularioModal = new bootstrap.Modal(document.getElementById('formularioModal'));
 const formulario = document.querySelector('#formulario');
@@ -59,7 +59,6 @@ btnNuevo.addEventListener('click', () => {
 
 async function mostrarPropiedades() {
   const propiedades = await obtenerPropiedades();
-
   const listado = document.getElementById('listado');
   listado.innerHTML = '';
   for (let propiedad of propiedades) {
@@ -67,20 +66,28 @@ async function mostrarPropiedades() {
     listado.innerHTML += `
     <div class="col  py-3">
       <div class="card" style="width: 18rem;">
-          <img src="imagen/${propiedad.imagen}" class="card-img-top" alt="${propiedad.titulo}">
-          <div class="card-body">
-              <h5 class="card-title"><span name="spantitulo">${propiedad.titulo}</span> - <span name="spanoperacion">${propiedad.operacion} </span></h5>
-              <p class="card-text"><span name="spandescripcion">${propiedad.descripcion}</span> <span name="spanmt2"> M2: ${propiedad.mt2} <span name="spanambientes"> Ambientes: ${propiedad.ambientes} <span name="spandireccion"> Direccion: ${propiedad.direccion}</p>
-              <p class="card-text"> <span name="spanpropietario"> ${propiedad.propietario}</span></p>
-              <p class="card-text"><span name="spanprecio">Precio: U$D ${propiedad.precio}</span></p>
-            <div class="card-footer d-flex justify-content-center">
-              <a class="btnEditar btn btn-primary">Editar</a>
-              <a class="btnBorrar btn btn-danger">Borrar</a>
-              <input type="hidden" class="idPropiedad" value="${propiedad.id}">
-              
-              <input type="hidden" class="imagenPropiedad" value="${propiedad.imagen ?? 'imagenNodisponible.jpg'}">
-            </div>
-          </div>
+        <img src="imagen/${propiedad.imagen}" class="card-img-top" alt="${propiedad.titulo}">
+        <div class="card-body">
+            <h5 class="card-title"><span name="spancodigo">${propiedad.codigo}</span> - <span name="spantitulo">${propiedad.titulo}</span></h5>
+            
+            <select name="spanoperacion" class="form-control operacionSelect"
+            placeholder="operacion">
+            <option value="compra" ${propiedad.operacion === 'Compra' ? 'selected' : ''}>Compra</option>
+            <option value="venta" ${propiedad.operacion === 'Venta' ? 'selected' : ''}>Venta</option>
+            <option value="alquiler" ${propiedad.operacion === 'Alquiler' ? 'selected' : ''}>Alquiler</option>
+            </select>
+            <p class="card-text"><span name="spandescripcion">${propiedad.descripcion}</span></p>
+            <p class="card-text"> M2: <span name="spanmt2">${propiedad.mt2}</span>  - Ambientes: <span name="spanambientes">${propiedad.ambientes}</span></p>
+            <p class="card-text"> Direccion: <span name="spandireccion">${propiedad.direccion}</span></p>
+            <p class="card-text"><span name="spanpropietario">${propiedad.propietario}</span></p>
+            <p class="card-text">Precio: U$D <span name="spanprecio">${propiedad.precio}</span></p>
+        </div>
+        <div class="card-footer d-flex justify-content-center">
+          <a class="btnEditar btn btn-primary">Editar</a>
+          <a class="btnBorrar btn btn-danger">Borrar</a>
+          <input type="hidden" class="idPropiedad" value="${propiedad.id}">
+          <input type="hidden" class="imagenPropiedad" value="${propiedad.imagen??'imagenNodisponible.jpg'}">
+        </div>
       </div>
     </div>
       `
@@ -148,9 +155,10 @@ on(document, 'click', '.btnEditar', e => {
 
   // Guardamos los valores del card de la propiedad
   id = cardFooter.querySelector('.idPropiedad').value;
+  const codigo = cardFooter.parentNode.querySelector('span[name=spancodigo]').innerHTML;
   const titulo = cardFooter.parentNode.querySelector('span[name=spantitulo]').innerHTML;
   const propietario = cardFooter.parentNode.querySelector('span[name=spanpropietario]').innerHTML;
-  const operacion = cardFooter.parentNode.querySelector('span[name=spanoperacion]').innerHTML;
+  const operacion = cardFooter.parentNode.querySelector('.operacionSelect').value;
   const precio = cardFooter.parentNode.querySelector('span[name=spanprecio]').innerHTML;
   const mt2 = cardFooter.parentNode.querySelector('span[name=spanmt2]').innerHTML;
   const ambientes = cardFooter.parentNode.querySelector('span[name=spanambientes]').innerHTML;
@@ -159,6 +167,7 @@ on(document, 'click', '.btnEditar', e => {
   const imagen = cardFooter.querySelector('.imagenPropiedad').value;
 
   // Asignamos los valores a los input del formulario
+  inputCodigo.value = codigo;
   inputTitulo.value = titulo;
   inputPropietario.value = propietario;
   inputOperacion.value = operacion;
