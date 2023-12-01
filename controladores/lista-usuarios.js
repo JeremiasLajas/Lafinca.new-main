@@ -2,7 +2,7 @@
 import { insertarUsuarios, obtenerUsuarios, actualizarUsuarios, eliminarUsuarios } from "../modelos/usuarios";
 
 const btnAgregar = document.querySelector('#btnAgregar');
-const formularioModal = new bootstrap.Modal(document.getElementById('formularioModal'));
+const formularioModal = new bootstrap.Modal(document.getElementById('addUserModal'));
 const formulario = document.querySelector('#formulario');
 const contenedorUsuarios = document.querySelector('#lista-usuario tbody')
 // Alerta
@@ -61,29 +61,23 @@ btnAgregar.addEventListener('click', () => {
 // Función para mostrar usuarios
 async function mostrarUsuarios() {
     const usuarios = await obtenerUsuarios();
-    const listado = document.getElementById('listado');
-    listado.innerHTML = '';
-    for (let usuario of usuarios) {
-        console.log(usuario);
-        // Código similar al anterior, adaptado para mostrar usuarios
-        listado.innerHTML += `
-            <tr>
-    <td>${usuario.codigo}</td>
-    <td>${usuario.nombreyapellido}</td>
-    <td>${usuario.correo}</td>
-    <td>
-        <!-- Botones para modificar y eliminar usuario -->
-        <button type="button" class="btnEditar btn-primary btn-sm" data-toggle="modal" data-target="#editUserModal">
-            Editar
-        </button>
-        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteUserModal">
-            Eliminar
-        </button>
+    const tablaUsuarios = document.querySelector('table tbody');
+    tablaUsuarios.innerHTML = '';
+     for(let usuario of usuarios) {
+        const fila = document.createElement('tr');
+        
+        fila.innerHTML += `
+        <td><span name="spancodigo">${usuario.codigo}</span></td>
+        <td><span name="spannombreyapellido">${usuario.nombreyapellido}</span></td>
+        <td><span name="spancorreo">${usuario.correo}</span></td>
+        <td>
+        <a class="btnEditar btn btn-primary btn-sm">Editar</a>
+        <a class="btnBorrar btn btn-danger btn-sm">Borrar</a>
         <input type="hidden" class="idUsuario" value="${usuario.id}">
-    </td>
-</tr>
-
+        </td>
+        
       `;
+      tablaUsuarios.appendChild(fila);
 
 
     }
@@ -146,7 +140,7 @@ on(document, 'click', '.btnEditar', e => {
     const botones = e.target.parentNode;
     id = botones.querySelector('.idUsuario').value;
     const codigo = botones.parentNode.querySelector('span[name=spancodigo]').innerHTML;
-    const nombre = botones.parentNode.querySelector('span[name=spannombre]').innerHTML;
+    const nombre = botones.parentNode.querySelector('span[name=spannombreyapellido]').innerHTML;
     const correo = botones.parentNode.querySelector('span[name=spancorreo]').innerHTML;
     const dni = botones.parentNode.querySelector('span[name=spandni]').innerHTML;
     const fechadenac = botones.parentNode.querySelector('span[name=spanfechadenac]').innerHTML;

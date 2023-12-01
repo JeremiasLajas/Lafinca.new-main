@@ -62,21 +62,27 @@
                 <table id="lista-usuarios" class="table mt-3">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Codigo</th>
                             <th>Nombre</th>
                             <th>Correo Electrónico</th>
                         </tr>
                     </thead>
-                    <div id="listado">
-                        <tbody>
 
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <!-- Botones para modificar y eliminar usuario -->
+                                <a class="btnEditar btn btn-primary btn-sm">Editar</a>
+                                <a class="btnBorrar btn btn-danger btn-sm">Borrar</a>
+                                <input type="hidden" class="idUsuario" value="${usuario.id}">
+                            </td>
+                        </tr>
 
+                    </tbody>
 
-                            <!-- Aquí se mostrarán los usuarios -->
-
-                            <!-- Puedes agregar más filas de usuarios aquí -->
-                        </tbody>
-                    </div>
                 </table>
             </div>
 
@@ -91,7 +97,7 @@
                         </div>
                         <div class="modal-body">
                             <!-- Formulario para agregar usuario -->
-                            <form>
+                            <form id="formulario">
                                 <!-- Campos del formulario -->
                                 <div class="form-group">
                                     <label for="codigo">Código:</label>
@@ -147,8 +153,8 @@
 
 
                                                 <!-- Botón para agregar usuario -->
-                                                <button type="button" class="btn btn-success mt-3 float-right"
-                                                    data-dismiss="modal" onclick="agregarUsuario()">Agregar</button>
+                                                <button type="submit" class="btn btn-success mt-3 float-right"
+                                                    data-dismiss="modal">Agregar</button>
                             </form>
                         </div>
                     </div>
