@@ -26,8 +26,11 @@ export function insertarUsuarios(datos) {
     .then(res => res.json())
     .then(data => {
       console.log(data);
+      
       return data;
+      
     });
+    
 }
   /**
    * Actualiza los datos en la base de datos
@@ -45,7 +48,9 @@ export function insertarUsuarios(datos) {
         .then(data => {
           console.log(data);
           return data;
+          
         });
+        
     }
 
   /**

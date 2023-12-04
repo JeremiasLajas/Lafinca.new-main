@@ -4,6 +4,7 @@ import { insertarUsuarios, obtenerUsuarios, actualizarUsuarios, eliminarUsuarios
 const btnAgregar = document.querySelector('#btnAgregar');
 const formularioModal = new bootstrap.Modal(document.getElementById('addUserModal'));
 const formulario = document.querySelector('#formulario');
+const btnGuardar = document.querySelector('#btnGuardar');
 const contenedorUsuarios = document.querySelector('#lista-usuario tbody')
 // Alerta
 const alerta = document.querySelector('#alerta');
@@ -58,18 +59,34 @@ btnAgregar.addEventListener('click', () => {
     opcion = 'insertar';
 });
 
+let usuarios = [];
+
 // Función para mostrar usuarios
 async function mostrarUsuarios() {
-    const usuarios = await obtenerUsuarios();
+    usuarios = await obtenerUsuarios();
     const tablaUsuarios = document.querySelector('table tbody');
     tablaUsuarios.innerHTML = '';
      for(let usuario of usuarios) {
         const fila = document.createElement('tr');
         
         fila.innerHTML += `
-        <td><span name="spancodigo">${usuario.codigo}</span></td>
+        <td ><span name="spancodigo">${usuario.codigo}</span></td>
         <td><span name="spannombreyapellido">${usuario.nombreyapellido}</span></td>
         <td><span name="spancorreo">${usuario.correo}</span></td>
+        <td style="display: none;"><span name="spandni">${usuario.dni}</span></td>
+        <td style="display: none;"><span name="spanfechadenac">${usuario.fechadenacimiento}</span></td>
+        <td style="display: none;"><select name="spansexo" class="form-control sexoSelect"
+        placeholder="sexo">
+        <option value="femenino" ${usuario.sexo === 'Femenino' ? 'selected' : ''}>Femenino</option>
+        <option value="massculino" ${usuario.sexo === 'Masculino' ? 'selected' : ''}>Masculino</option>
+        <option value="no-binario" ${usuario.sexo === 'No binario' ? 'selected' : ''}>No binario</option>
+        </select></td>
+        <td style="display: none;"><span name="spandirección">${usuario.direccion}</span></td>
+        <td style="display: none;"><span name="spanlocalidad">${usuario.localidad}</span></td>
+        <td style="display: none;"><span name="spanprovincia">${usuario.provincia}</span></td>
+        <td style="display: none;"><span name="spanpassword">${usuario.password}</span></td>
+        <td style="display: none;"><span name="spanobservaciones">${usuario.observaciones}</span></td>
+        <td style="display: none;"><span name="spantelefono">${usuario.telefono}</span></td>
         <td>
         <a class="btnEditar btn btn-primary btn-sm">Editar</a>
         <a class="btnBorrar btn btn-danger btn-sm">Borrar</a>
@@ -83,18 +100,21 @@ async function mostrarUsuarios() {
     }
 }
 
-// Evento submit del formulario, adaptado para usuarios
-formulario.addEventListener('submit', function (e) {
+// Evento submit del formulario
+btnGuardar.addEventListener('click', function (e) {
+    debugger;
     e.preventDefault();
     const datos = new FormData(formulario);
-
+    debugger;
     switch (opcion) {
         case 'insertar':
+            debugger;
             mensajeAlerta = `Datos guardados`;
             insertarUsuarios(datos);
             break;
 
         case 'actualizar':
+            debugger;
             mensajeAlerta = `Datos actualizados`;
             actualizarUsuarios(datos, id);
             break;
@@ -118,6 +138,11 @@ const insertarAlerta = (mensaje, tipo) => {
     </div>
     `;
     alerta.append(envoltorio);
+
+    setTimeout(() => {
+        envoltorio.remove();
+      }, 3000);
+
 };
 
 /**
@@ -137,29 +162,35 @@ const on = (elemento, evento, selector, manejador) => {
 
 // Evento para el botón Editar, adaptado para usuarios
 on(document, 'click', '.btnEditar', e => {
-    const botones = e.target.parentNode;
-    id = botones.querySelector('.idUsuario').value;
-    const codigo = botones.parentNode.querySelector('span[name=spancodigo]').innerHTML;
-    const nombre = botones.parentNode.querySelector('span[name=spannombreyapellido]').innerHTML;
-    const correo = botones.parentNode.querySelector('span[name=spancorreo]').innerHTML;
-    const dni = botones.parentNode.querySelector('span[name=spandni]').innerHTML;
-    const fechadenac = botones.parentNode.querySelector('span[name=spanfechadenac]').innerHTML;
-    const sexo = botones.parentNode.querySelector('span[name=spansexo]').innerHTML;
-    const dirección = botones.parentNode.querySelector('span[name=spandirección]').innerHTML;
-    const localidad = botones.parentNode.querySelector('span[name=spanlocalidad]').innerHTML;
-    const provincia = botones.parentNode.querySelector('span[name=spanprovincia]').innerHTML;
-    const password = botones.parentNode.querySelector('span[name=spanpassword]').innerHTML;
+    debugger;
+    id = e.target.parentNode.querySelector('.idUsuario').value;
 
-    inputCodigo.value = codigo;
-    inputNombre.value = nombre;
-    inputCorreo.value = correo;
-    inputDni.value = dni;
-    inputFechadenac.value = fechadenac;
-    inputSexo.value = sexo;
-    inputDireccion.value = direccción;
-    inputLocalidad.value = localidad;
-    inputProvincia.value = provincia;
-    inputPassword.value = password;
+    let usuario = usuarios.find(x => x.id === id); 
+
+    inputCodigo.value = usuario.codigo;
+    inputNombre.value = usuario.nombreyapellido;
+    inputCorreo.value = usuario.correo;
+    inputDni.value = usuario.dni;
+    inputFechaDeNacimiento.value = usuario.fechadenacimiento;
+    switch (usuario.sexo) {
+        case "Femenino":
+            inputSexo.value = "femenino";
+            break;
+        case "Masculino":
+            inputSexo.value = "massculino";
+            break;
+        default:
+            inputSexo.value = "no-binario";
+            break;
+    }
+    inputSexo.value = usuario.sexo;
+    inputDireccion.value = usuario.direccion;
+    inputLocalidad.value = usuario.localidad;
+    inputProvincia.value = usuario.provincia;
+    inputPassword.value = usuario.password;
+    inputObservaciones.value = usuario.observaciones;
+    inputTelefono.value = usuario.telefono;
+
 
     // Mostrar formulario
     formularioModal.show();
@@ -170,7 +201,7 @@ on(document, 'click', '.btnEditar', e => {
 on(document, 'click', '.btnBorrar', e => {
     const botones = e.target.parentNode;
     id = botones.querySelector('.idUsuario').value;
-    const nombre = botones.parentNode.querySelector('span[name=spannombre]').innerHTML;
+    const nombre = botones.parentNode.querySelector('span[name=spannombreyapellido]').innerHTML;
     let aceptar = confirm(`¿Realmente desea eliminar a ${nombre}?`);
 
     if (aceptar) {

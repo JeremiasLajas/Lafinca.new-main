@@ -48,7 +48,7 @@ btnNuevo.addEventListener('click', () => {
   inputDescripcion.value = null;
   inputImagen.value = null;
   frmImagen.src = './imagen/imagenNodisponible.png';
-  
+
 
   // Mostramos el formulario
   formularioModal.show();
@@ -86,7 +86,7 @@ async function mostrarPropiedades() {
           <a class="btnEditar btn btn-primary">Editar</a>
           <a class="btnBorrar btn btn-danger">Borrar</a>
           <input type="hidden" class="idPropiedad" value="${propiedad.id}">
-          <input type="hidden" class="imagenPropiedad" value="${propiedad.imagen??'imagenNodisponible.jpg'}">
+          <input type="hidden" class="imagenPropiedad" value="${propiedad.imagen ?? 'imagenNodisponible.jpg'}">
         </div>
       </div>
     </div>
@@ -98,16 +98,19 @@ async function mostrarPropiedades() {
  * Ejecuta el evento submit del formulario
  */
 formulario.addEventListener('submit', function (e) {
+  debugger;
   e.preventDefault();     // Prevenimos la acción por defecto
   const datos = new FormData(formulario); // Guardamos los datos del formulario
 
   switch (opcion) {
     case 'insertar':
+      debugger;
       mensajeAlerta = `Datos guardados`;
       insertarPropiedades(datos);
       break;
 
     case 'actualizar':
+      debugger;
       mensajeAlerta = `Datos actualizados`;
       actualizarPropiedades(datos, id);
       break;
@@ -130,6 +133,10 @@ const insertarAlerta = (mensaje, tipo) => {
   </div>
   `;
   alerta.append(envoltorio);
+
+  setTimeout(() => {
+    envoltorio.remove();
+  }, 3000);
 };
 
 /**
@@ -176,7 +183,7 @@ on(document, 'click', '.btnEditar', e => {
   inputAmbientes.value = ambientes;
   inputDireccion.value = direccion;
   inputDescripcion.value = descripcion;
-  
+
   frmImagen.src = `./imagen/${imagen}`;
 
   // Mostramos el formulario
