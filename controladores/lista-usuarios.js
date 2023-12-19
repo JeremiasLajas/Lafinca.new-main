@@ -122,6 +122,9 @@ btnGuardar.addEventListener('click', function (e) {
 
     insertarAlerta(mensajeAlerta, 'success');
     mostrarUsuarios();
+
+    // Referenciar al modal y cerrarlo
+    formularioModal.hide();
 });
 
 /**
