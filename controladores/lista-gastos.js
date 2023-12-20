@@ -87,8 +87,9 @@ btnGuardar.addEventListener('click', function (e) {
         case 'insertar':
             mensajeAlerta = `Datos guardados`;
             insertarGastos(datos);
+            
             break;
-
+            
         case 'actualizar':
             mensajeAlerta = `Datos actualizados`;
             actualizarGastos(datos, id);
@@ -96,10 +97,10 @@ btnGuardar.addEventListener('click', function (e) {
     }
 
     insertarAlerta(mensajeAlerta, 'success');
-    mostrarGastos(); 
+    mostrarGastos();
 
-      // Referenciar al modal y cerrarlo
-      formularioModal.hide();
+    // Referenciar al modal y cerrarlo
+    formularioModal.hide();
 });
 
 /**
@@ -140,8 +141,8 @@ const on = (elemento, evento, selector, manejador) => {
 
 // Evento para el botón Editar, adaptado para usuarios
 on(document, 'click', '.btnEditar', e => {
-    debugger;
-    const acciones = e.target.parentNode.parentNode;
+
+    const acciones = e.target.parentNode;
 
     id = acciones.querySelector('.idGasto').value;
     const descripcion = acciones.parentNode.querySelector('span[name=spandescripcion]').innerHTML;
@@ -155,7 +156,7 @@ on(document, 'click', '.btnEditar', e => {
     inputImporte.value = importe;
     inputFecha.value = fecha;
     inputObservaciones.value = observaciones;
-   
+
     switch (formaDePago) {
         case "Efectivo":
             inputFormaDePago.value = "efectivo";
